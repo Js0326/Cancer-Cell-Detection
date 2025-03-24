@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancer Cell Detection</title>
+
+    <!-- Linking CSS (if any) -->
+    <link rel="stylesheet" href="static/style.css">
+
+    <!-- JavaScript -->
+    <script defer src="static/script.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        #uploaded-image {
+            max-width: 300px;
+            display: none;
+            margin-top: 10px;
+        }
+
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cancer Cell Detection</h1>
+    <p>Upload an image to detect if the cancer cell is <b>Benign</b> or <b>Malignant</b>.</p>
+
+    <!-- File Input & Predict Button -->
+    <input type="file" id="file-input" accept="image/*">
+    <button id="predict-button">Predict</button>
+
+    <!-- Processing Indicator -->
+    <p id="processing" style="display: none; color: blue;">🌀 Processing...</p>
+
+    <!-- Display Prediction Result -->
+    <h2>Prediction:</h2>
+    <p id="prediction-result" style="font-weight: bold;"></p>
+
+    <!-- Show Uploaded Image -->
+    <h3>Uploaded Image:</h3>
+    <img id="uploaded-image" alt="Uploaded Image">
+
+</body>
+</html>
