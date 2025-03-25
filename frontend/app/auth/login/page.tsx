@@ -263,7 +263,9 @@ export default function LoginPage() {
                       id="terms"
                       name="terms"
                       checked={signupData.terms}
-                      onChange={handleSignupChange}
+                      onCheckedChange={(checked) => {
+                        setSignupData(prev => ({ ...prev, terms: checked as boolean }))
+                      }}
                     />
                     <Label htmlFor="terms" className="text-sm">
                       I agree to the{" "}

@@ -8,16 +8,27 @@ import { useTheme } from "next-themes"
 export default function CellVisualization() {
   const mountRef = useRef<HTMLDivElement>(null)
   const { theme } = useTheme()
+  const mountedRef = useRef<boolean>(false)
+  const sceneRef = useRef<THREE.Scene | null>(null)
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
+  const controlsRef = useRef<OrbitControls | null>(null)
+  const frameIdRef = useRef<number>(0)
 
   useEffect(() => {
-    if (!mountRef.current) return
+    if (!mountRef.current || mountedRef.current) return
+
+    mountedRef.current = true
 
     // Scene setup
     const scene = new THREE.Scene()
+    sceneRef.current = scene
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+    cameraRef.current = camera
     camera.position.z = 5
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    rendererRef.current = renderer
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     mountRef.current.innerHTML = ""
@@ -25,6 +36,7 @@ export default function CellVisualization() {
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement)
+    controlsRef.current = controls
     controls.enableDamping = true
     controls.dampingFactor = 0.05
     controls.enableZoom = false
@@ -96,7 +108,7 @@ export default function CellVisualization() {
 
     // Animation
     const animate = () => {
-      requestAnimationFrame(animate)
+      frameIdRef.current = requestAnimationFrame(animate)
 
       nucleus.rotation.x += 0.002
       nucleus.rotation.y += 0.003
@@ -115,11 +127,11 @@ export default function CellVisualization() {
 
     // Handle window resize
     const handleResize = () => {
-      if (!mountRef.current) return
+      if (!mountRef.current || !cameraRef.current || !rendererRef.current) return
 
-      camera.aspect = window.innerWidth / window.innerHeight
-      camera.updateProjectionMatrix()
-      renderer.setSize(window.innerWidth, window.innerHeight)
+      cameraRef.current.aspect = window.innerWidth / window.innerHeight
+      cameraRef.current.updateProjectionMatrix()
+      rendererRef.current.setSize(window.innerWidth, window.innerHeight)
     }
 
     window.addEventListener("resize", handleResize)
@@ -128,20 +140,40 @@ export default function CellVisualization() {
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize)
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement)
+      cancelAnimationFrame(frameIdRef.current)
+
+      if (controlsRef.current) {
+        controlsRef.current.dispose()
       }
 
-      // Dispose geometries and materials
-      nucleusGeometry.dispose()
-      nucleusMaterial.dispose()
-      membraneGeometry.dispose()
-      membraneMaterial.dispose()
+      if (rendererRef.current) {
+        rendererRef.current.dispose()
+        if (mountRef.current && rendererRef.current.domElement) {
+          mountRef.current.removeChild(rendererRef.current.domElement)
+        }
+      }
 
-      organelles.forEach((organelle) => {
-        ;(organelle.geometry as THREE.BufferGeometry).dispose()
-        ;(organelle.material as THREE.Material).dispose()
-      })
+      if (sceneRef.current) {
+        sceneRef.current.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            if (object.geometry) object.geometry.dispose()
+            if (object.material) {
+              if (Array.isArray(object.material)) {
+                object.material.forEach(material => material.dispose())
+              } else {
+                object.material.dispose()
+              }
+            }
+          }
+        })
+      }
+
+      // Reset refs
+      sceneRef.current = null
+      cameraRef.current = null
+      rendererRef.current = null
+      controlsRef.current = null
+      mountedRef.current = false
     }
   }, [theme])
 

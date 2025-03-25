@@ -302,9 +302,9 @@ export default function HomePage() {
           </h1>
           <p className="text-2xl text-gray-400 max-w-2xl">
             Upload histopathological images and get real-time classification results using our advanced Swin Transformer-based model.
-          </p>
-        </div>
-      </div>
+            </p>
+          </div>
+          </div>
     </div>
   )
 }
