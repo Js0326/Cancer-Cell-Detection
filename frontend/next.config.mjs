@@ -15,15 +15,11 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-    domains: ['localhost', 'cancer-cell-detection-backend.onrender.com'],
   },
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
-  },
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   },
 }
 

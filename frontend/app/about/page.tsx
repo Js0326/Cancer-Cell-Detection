@@ -24,7 +24,7 @@ export default function AboutPage() {
           <p className="mb-6">
             For more information or support, please contact us at support@celldetect.ai
           </p>
-        </div>
+                </div>
       </div>
     </div>
   )
