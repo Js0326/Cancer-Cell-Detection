@@ -1,7 +1,7 @@
-flask==3.0.2
+flask==2.3.3
 onnxruntime==1.4.0
-opencv-python==4.8.1.78
-numpy==1.24.4
-Pillow==10.0.0
+opencv-python-headless==4.8.1.78
+numpy==1.23.5
+Pillow==9.5.0
 gunicorn==21.2.0
-python-dotenv==1.0.1 
+python-dotenv==1.0.0 
