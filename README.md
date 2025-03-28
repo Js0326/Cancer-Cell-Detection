@@ -78,7 +78,7 @@ An advanced web application for detecting and classifying cancer cells in histop
 
 For support or inquiries:
 - Email: info@celldetect.ai
-- Phone: +91 80628 38283
+- Phone: +91 80926 38283
 - Address: 1A-029, King's Palace-12, Campus-8, KIIT Road, Patia, Bhubaneswar, India (751024)
 
 ## License
